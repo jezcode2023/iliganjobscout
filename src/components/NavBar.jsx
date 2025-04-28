@@ -26,14 +26,28 @@ const NavBar = () => {
 
   return (
     <div className={`fixed top-0 left-0 w-full h-20 ${navbarBgColor} shadow-md z-50 flex items-center px-4`}>
-      {/* Logo */}
-      <div className="flex items-center">
-        <img
-          src={jobscoutlogo}
-          alt="Iligan JobScout Logo"
-          className="h-16 w-auto"
-        />
-        <span className="ml-2 font-bold text-xl">Iligan JobScout</span>
+      {/* Logo and Hamburger Icon Container */}
+      <div className="flex items-center justify-between w-full md:w-auto">
+        {/* Logo */}
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate('/homepage')} // Navigate to homepage
+        >
+          <img
+            src={jobscoutlogo}
+            alt="Iligan JobScout Logo"
+            className="h-16 w-auto"
+          />
+          <span className="ml-2 font-bold text-xl">Iligan JobScout</span>
+        </div>
+
+        {/* Mobile Menu Icon */}
+        <div
+          onClick={() => setNav(!nav)}
+          className="cursor-pointer md:hidden text-black"
+        >
+          {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
+        </div>
       </div>
 
       {/* Links */}
@@ -66,14 +80,6 @@ const NavBar = () => {
         >
           Sign In
         </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        onClick={() => setNav(!nav)}
-        className="cursor-pointer md:hidden text-black"
-      >
-        {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
       </div>
 
       {/* Mobile Links */}
