@@ -11,13 +11,13 @@ const NavBar = () => {
 
   // Determine the background color based on the current route
   const isHomepage = location.pathname === '/homepage';
-  const navbarBgColor = isHomepage ? 'bg-white' : 'bg-gray-100';
+  const navbarBgColor = isHomepage ? 'bg-whites' : 'bg-gray-100';
 
   const links = [
-    { id: 1, link: 'Home' },
-    { id: 2, link: 'Category' },
-    { id: 3, link: 'Company' },
-    { id: 4, link: 'Contact' },
+    { id: 1, link: 'Home', path: '/homepage' },
+    { id: 2, link: 'Category', path: '/category' }, // Added Category link
+    { id: 3, link: 'Employers', path: '/company' },
+    { id: 4, link: 'Contact', path: '/contact-us' },
   ];
 
   const handleHomeClick = () => {
@@ -25,7 +25,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className={`fixed top-0 left-0 w-full h-20 ${navbarBgColor} shadow-md z-50 flex items-center px-4`}>
+    <div className="fixed top-0 left-0 w-full h-20 bg-whites shadow-md z-50 flex items-center px-4">
       {/* Logo and Hamburger Icon Container */}
       <div className="flex items-center justify-between w-full md:w-auto">
         {/* Logo */}
@@ -52,19 +52,13 @@ const NavBar = () => {
 
       {/* Links */}
       <ul className="hidden md:flex justify-center space-x-6 flex-1">
-        {links.map(({ id, link }) => (
+        {links.map(({ id, link, path }) => (
           <li
             key={id}
             className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={link === 'Home' ? handleHomeClick : undefined} // Scroll to top for "Home"
+            onClick={() => navigate(path)}
           >
-            {link === 'Home' ? (
-              <span>{link}</span> // Use a span for "Home" to avoid ScrollLink
-            ) : (
-              <ScrollLink to={link.toLowerCase()} smooth duration={500}>
-                {link}
-              </ScrollLink>
-            )}
+            {link}
           </li>
         ))}
       </ul>
@@ -75,34 +69,23 @@ const NavBar = () => {
           Post a Job
         </button>
         <button
-          className="bg-navy text-whites px-4 py-2 rounded-md hover:bg-navy-600"
+          className="bg-navy text-whites px-4 py-2 rounded-md hover:bg-blue"
           onClick={() => navigate('/')} // Navigate to SignIn component
         >
-          Sign In
+          Sign in
         </button>
       </div>
 
       {/* Mobile Links */}
       {nav && (
         <ul className="absolute top-20 left-0 w-full bg-white flex flex-col items-center space-y-6 py-4 shadow-md">
-          {links.map(({ id, link }) => (
+          {links.map(({ id, link, path }) => (
             <li
               key={id}
               className="cursor-pointer text-black hover:underline"
-              onClick={link === 'Home' ? handleHomeClick : undefined} // Scroll to top for "Home"
+              onClick={() => navigate(path)}
             >
-              {link === 'Home' ? (
-                <span onClick={() => setNav(false)}>{link}</span> // Use a span for "Home"
-              ) : (
-                <ScrollLink
-                  to={link.toLowerCase()}
-                  smooth
-                  duration={500}
-                  onClick={() => setNav(false)}
-                >
-                  {link}
-                </ScrollLink>
-              )}
+              {link}
             </li>
           ))}
           <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">

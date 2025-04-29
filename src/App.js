@@ -1,23 +1,17 @@
-import NavBar from "./components/NavBar";
-import Home from './components/Homepage';
-import SignIn from'./components/signin';
-
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SignIn from './components/signin';
+import JobSeekerSignIn from './components/jobseekersignin';
+import CompanySignIn from './components/companysignin';
 
 function App() {
   return (
-    <div className=" flex w-full h-full bg-gray-900">
-
-    
-    <NavBar />
-    <Home />
-    <SignIn />
-    
-   
-
-
-
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/jobseeker-signin" element={<JobSeekerSignIn />} />
+        <Route path="/company-signin" element={<CompanySignIn />} />
+      </Routes>
+    </Router>
   );
 }
 

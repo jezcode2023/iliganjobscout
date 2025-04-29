@@ -11,7 +11,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="w-full bg-white mt-20">
+    <div className="w-full bg-whites mt-20">
       {/* Search Bar Section */}
       <div className="relative w-full h-20 bg-navy flex items-center justify-center">
         <div className="relative w-1/2">
