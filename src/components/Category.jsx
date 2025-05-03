@@ -32,6 +32,7 @@ const Category = () => {
     'Trade & Services',
     'Virtual Assistant & Online Jobs',
   ];
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center pt-20">

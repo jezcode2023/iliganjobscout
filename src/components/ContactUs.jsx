@@ -14,6 +14,7 @@ const ContactUs = () => {
     setSubject('');
     setMessage('');
   };
+  
 
   return (
     <div className="flex flex-col mt-5 items-center justify-center min-h-screen bg-gray-100">
