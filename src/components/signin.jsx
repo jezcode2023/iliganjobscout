@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import jobscoutlogo from './jobscout.png';
+import jobscoutlogo from './jobscout.png'; // Keep this import
 
-const SignIn = () => {
+const SignIn = ({ setUserRole }) => {
   const navigate = useNavigate();
 
   const handleSignIn = (role) => {
+    if (typeof setUserRole === 'function') {
+      setUserRole(role); // Set the user role
+    }
+
     if (role === 'jobseeker') {
       navigate('/jobseeker-signin'); // Navigate to Job Seeker Sign In page
     } else if (role === 'company') {

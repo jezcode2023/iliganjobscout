@@ -1,15 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState } from 'react';
+import NavBar from './components/NavBar';
 import SignIn from './components/signin';
 import JobSeekerSignIn from './components/jobseekersignin';
 import CompanySignIn from './components/companysignin';
+import Homepage from './components/Homepage';
 
 function App() {
+  const [userRole, setUserRole] = useState(null); // Manage user role state
+
   return (
     <Router>
+      {/* Pass userRole to NavBar */}
+      <NavBar userRole={userRole} />
       <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/jobseeker-signin" element={<JobSeekerSignIn />} />
-        <Route path="/company-signin" element={<CompanySignIn />} />
+        {/* Pass setUserRole to SignIn */}
+        <Route path="/" element={<SignIn setUserRole={setUserRole} />} />
+        <Route path="/jobseeker-signin" element={<JobSeekerSignIn setUserRole={setUserRole} />} />
+        <Route path="/company-signin" element={<CompanySignIn setUserRole={setUserRole} />} />
+        <Route path="/homepage" element={<Homepage />} />
       </Routes>
     </Router>
   );
