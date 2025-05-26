@@ -1,19 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import jobscoutlogo from './jobscout.png'; // Keep this import
+import jobscoutlogo from './jobscout.png';
+import { supabase } from '../supabaseClient'; // Import Supabase client
 
 const JobSeekerSignIn = ({ setUserRole }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Prevent form submission reload
+  const handleLogin = async (e) => {
+    e.preventDefault();
     if (email && password) {
-      if (typeof setUserRole === 'function') {
-        setUserRole('jobseeker'); // Set the user role to jobseeker
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        alert(error.message);
+      } else {
+        if (typeof setUserRole === 'function') {
+          setUserRole('jobseeker');
+        }
+        navigate('/user-homepage');
       }
-      navigate('/homepage'); // Redirect to homepage
     } else {
       alert('Please enter both email and password.');
     }
@@ -77,6 +86,15 @@ const JobSeekerSignIn = ({ setUserRole }) => {
             Log In
           </button>
         </form>
+        <div className="mt-6 text-center">
+          <span className="text-gray-700">No account yet? </span>
+          <a
+            href="/jobseeker-signup"
+            className="text-blue-600 hover:underline font-semibold"
+          >
+            Register here
+          </a>
+        </div>
       </div>
     </div>
   );

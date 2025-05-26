@@ -1,18 +1,97 @@
-import React from 'react';
-import falls from '../components/falls.jpg'; // Adjust the path if needed
+import React, { useState } from 'react';
+import falls from '../components/falls.jpg'; // Adjust path if needed
+import jobscoutlogo from './jobscout.png';
+import { useNavigate } from 'react-router-dom';
 
-const Homepage = () => {
-  const categoryImages = {
-    'Accounting/Finance': 'Accounting/Finance',
-    'Virtual Assistant': 'Virtual Assistant',
-    'Human Resource': 'Human Resource',
-    'Designer/Art': 'Designer/Art',
-    'Service Crew': 'Service Crew',
-    'Health Workers': 'Health Workers',
+const UserHomepage = () => {
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleLogout = () => {
+    // Add your logout logic here (e.g., clear auth, redirect, etc.)
+    navigate('/');
   };
 
   return (
     <div className="w-full bg-whites mt-20">
+      {/* Navbar for logged-in users (no Sign In button) */}
+      <div className="fixed top-0 left-0 w-full h-20 bg-whites shadow-md z-50 flex items-center px-4">
+        {/* Logo */}
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate('/user-homepage')}
+        >
+          <img src={jobscoutlogo} alt="Iligan JobScout Logo" className="h-16 w-auto" />
+          <span className="ml-2 font-bold text-xl">Iligan JobScout</span>
+        </div>
+        {/* Links */}
+        <ul className="hidden md:flex justify-center space-x-6 flex-1">
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/user-homepage')}
+          >
+            Home
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/category')}
+          >
+            Category
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/company')}
+          >
+            Employers
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/contact-us')}
+          >
+            Contact
+          </li>
+        </ul>
+        {/* Hamburger Menu */}
+        <div className="ml-auto relative">
+          <button
+            className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Open user menu"
+          >
+            {/* Hamburger Icon */}
+            <svg
+              className="w-7 h-7 text-navy"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+            </svg>
+          </button>
+          {/* Dropdown Menu */}
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 z-50">
+              <button
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate('/profile');
+                }}
+              >
+                Profile
+              </button>
+              <button
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Hero Section with Search */}
       <section
         className="relative bg-navy py-16 w-full"
@@ -33,7 +112,7 @@ const Homepage = () => {
             </p>
           </div>
           <div className="max-w-2xl mx-auto">
-            <div className="flex bg-gray rounded-lg overflow-hidden shadow-lg">
+            <div className="flex bg-white rounded-lg overflow-hidden shadow-lg">
               <input
                 type="text"
                 placeholder="Search for jobs, companies, or keywords"
@@ -219,8 +298,6 @@ const Homepage = () => {
         </div>
       </div>
 
-     
-
       {/* Footer Section */}
       <div className="w-full bg-navy text-white py-6 text-center">
         <p>
@@ -236,4 +313,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default UserHomepage;

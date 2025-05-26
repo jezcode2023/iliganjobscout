@@ -5,6 +5,7 @@ import SignIn from './components/signin';
 import JobSeekerSignIn from './components/jobseekersignin';
 import CompanySignIn from './components/companysignin';
 import Homepage from './components/Homepage';
+import UserHomepage from './components/UserHomepage'; // Import UserHomepage component
 
 function App() {
   const [userRole, setUserRole] = useState(null); // Manage user role state
@@ -19,6 +20,7 @@ function App() {
         <Route path="/jobseeker-signin" element={<JobSeekerSignIn setUserRole={setUserRole} />} />
         <Route path="/company-signin" element={<CompanySignIn setUserRole={setUserRole} />} />
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/user-homepage" element={<UserHomepage />} /> {/* Add route for UserHomepage */}
       </Routes>
     </Router>
   );

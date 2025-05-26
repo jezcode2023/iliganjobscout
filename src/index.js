@@ -9,6 +9,7 @@ import CompanySignIn from './components/companysignin';
 import Homepage from './components/Homepage';
 import ContactUs from './components/ContactUs'; // Import ContactUs component
 import Category from './components/Category'; // Import Category component
+import UserHomepage from './components/UserHomepage'; // Import UserHomepage component
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,6 +22,8 @@ ReactDOM.render(
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/category" element={<Category />} /> {/* Added route */}
+        <Route path="/user-homepage" element={<UserHomepage />} /> {/* Add route for UserHomepage */}
+
       </Routes>
     </Router>
   </React.StrictMode>,
