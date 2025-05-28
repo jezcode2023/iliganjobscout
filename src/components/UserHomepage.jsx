@@ -6,10 +6,19 @@ import { useNavigate } from 'react-router-dom';
 const UserHomepage = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
   const handleLogout = () => {
     // Add your logout logic here (e.g., clear auth, redirect, etc.)
     navigate('/');
+  };
+
+  // Handle search form submit and redirect to SearchResults.jsx
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/search?query=${encodeURIComponent(search)}`);
+    }
   };
 
   return (
@@ -34,13 +43,13 @@ const UserHomepage = () => {
           </li>
           <li
             className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/category')}
+            onClick={() => navigate('/user-category')}
           >
             Category
           </li>
           <li
             className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/company')}
+            onClick={() => navigate('/user-company')}
           >
             Employers
           </li>
@@ -111,14 +120,19 @@ const UserHomepage = () => {
               Connect with thousands of employers and opportunities
             </p>
           </div>
-          <div className="max-w-2xl mx-auto">
+          <form className="max-w-2xl mx-auto" onSubmit={handleSearch}>
             <div className="flex bg-white rounded-lg overflow-hidden shadow-lg">
               <input
                 type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search for jobs, companies, or keywords"
                 className="w-full px-6 py-4 border-none text-gray-700"
               />
-              <button className="bg-navy text-white px-8 py-4 whitespace-nowrap flex items-center">
+              <button
+                type="submit"
+                className="bg-navy text-white px-8 py-4 whitespace-nowrap flex items-center"
+              >
                 <span className="w-5 h-5 flex items-center justify-center mr-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -138,7 +152,7 @@ const UserHomepage = () => {
                 Search
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
 
@@ -160,12 +174,12 @@ const UserHomepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   ACCOUNTANT/FINANCE
                 </h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Accountant/Finance')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
             {/* Category 2 */}
@@ -179,12 +193,12 @@ const UserHomepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">SECRETARY</h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Secretary')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
             {/* Category 3 */}
@@ -200,12 +214,12 @@ const UserHomepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   VIRTUAL ASSISTANT
                 </h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Virtual Assistant')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
             {/* Category 4 */}
@@ -219,12 +233,12 @@ const UserHomepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">FOOD SERVICE</h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Food Service')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
             {/* Category 5 */}
@@ -238,12 +252,12 @@ const UserHomepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">HUMAN RESOURCE</h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Human Resource')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
             {/* Category 6 */}
@@ -259,12 +273,12 @@ const UserHomepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   HEALTHCARE WORKERS
                 </h3>
-                <a
-                  href="#"
+                <button
+                  onClick={() => navigate('/search?category=Healthcare Workers')}
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -302,7 +316,7 @@ const UserHomepage = () => {
       <div className="w-full bg-navy text-white py-6 text-center">
         <p>
           Looking for a job? Find the perfect job for you{' '}
-          <a href="#" className="underline">
+          <a href="/category" className="underline">
             here
           </a>
           .

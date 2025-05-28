@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import jobscoutlogo from './jobscout.png'; // Keep this import
+import jobscoutlogo from './jobscout.png';
+import { supabase } from '../supabaseClient';
 
 const CompanySignIn = ({ setUserRole }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // Prevent form submission reload
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     if (email && password) {
-      if (typeof setUserRole === 'function') {
-        setUserRole('company'); // Set the user role to company
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      setLoading(false);
+      if (error) {
+        alert(error.message);
+      } else {
+        if (typeof setUserRole === 'function') {
+          setUserRole('company');
+        }
+        // Go directly to dashboard after successful login
+        navigate('/company-dashboard');
       }
-      navigate('/homepage'); // Redirect to homepage
     } else {
+      setLoading(false);
       alert('Please enter both email and password.');
     }
   };
@@ -73,10 +87,20 @@ const CompanySignIn = ({ setUserRole }) => {
           <button
             type="submit"
             className="w-full bg-navy text-white px-4 py-2 rounded-md hover:bg-blue"
+            disabled={loading}
           >
-            Log In
+            {loading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
+        <div className="mt-6 text-center">
+          <span className="text-gray-700">No account yet? </span>
+          <a
+            href="/company-registration"
+            className="text-blue-600 hover:underline font-semibold"
+          >
+            Register here.
+          </a>
+        </div>
       </div>
     </div>
   );

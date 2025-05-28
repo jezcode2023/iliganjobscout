@@ -89,7 +89,7 @@ const JobSeekerSignIn = ({ setUserRole }) => {
         <div className="mt-6 text-center">
           <span className="text-gray-700">No account yet? </span>
           <a
-            href="/jobseeker-signup"
+            href="/jobseeker-registration"
             className="text-blue-600 hover:underline font-semibold"
           >
             Register here

@@ -1,20 +1,113 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import jobscoutlogo from './jobscout.png';
 import falls from '../components/falls.jpg';
+import { supabase } from '../supabaseClient';
 
-const Homepage = () => {
-  const [search, setSearch] = useState('');
+const CompanyHomepage = () => {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const [searching, setSearching] = useState(false);
+
+  const handleLogout = () => {
+    // Add your logout logic here (e.g., clear auth, redirect, etc.)
+    navigate('/company-signin');
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (search.trim()) {
-      navigate(`/search?query=${encodeURIComponent(search)}`);
-    }
+    if (!search.trim()) return;
+    navigate(`/search?query=${encodeURIComponent(search)}`);
   };
 
   return (
     <div className="w-full bg-whites mt-20">
+      {/* Navbar for company users */}
+      <div className="fixed top-0 left-0 w-full h-20 bg-whites shadow-md z-50 flex items-center px-4">
+        {/* Logo */}
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => navigate('/company-homepage')}
+        >
+          <img src={jobscoutlogo} alt="Iligan JobScout Logo" className="h-16 w-auto" />
+          <span className="ml-2 font-bold text-xl">Iligan JobScout</span>
+        </div>
+        {/* Links */}
+        <ul className="hidden md:flex justify-center space-x-6 flex-1">
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/company-homepage')}
+          >
+            Home
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/company-category')}
+          >
+            Category
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/company-applicants')}
+          >
+            Applicants
+          </li>
+          <li
+            className="px-3 text-xl cursor-pointer text-black hover:underline"
+            onClick={() => navigate('/contact-us')}
+          >
+            Contact
+          </li>
+        </ul>
+        {/* Post a Job Button */}
+        <button
+          className="ml-4 bg-navy text-white px-4 py-2 rounded-md hover:bg-blue"
+          onClick={() => navigate('/post-job')}
+        >
+          Post a Job
+        </button>
+        {/* Hamburger Menu */}
+        <div className="ml-4 relative">
+          <button
+            className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Open user menu"
+          >
+            {/* Hamburger Icon */}
+            <svg
+              className="w-7 h-7 text-navy"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
+            </svg>
+          </button>
+          {/* Dropdown Menu */}
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 z-50">
+              <button
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate('/company-dashboard');
+                }}
+              >
+                Dashboard
+              </button>
+              <button
+                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Hero Section with Search */}
       <section
         className="relative bg-navy py-16 w-full"
@@ -28,24 +121,25 @@ const Homepage = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-10">
             <h1 className="text-4xl font-bold text-whites mb-4">
-              Find Your Dream Job Today
+              Find the Best Talent for Your Company
             </h1>
             <p className="text-xl text-white opacity-90">
-              Connect with thousands of employers and opportunities
+              Post jobs and manage applicants easily with Iligan JobScout
             </p>
           </div>
           <form className="max-w-2xl mx-auto" onSubmit={handleSearch}>
-            <div className="flex bg-gray rounded-lg overflow-hidden shadow-lg">
+            <div className="flex bg-white rounded-lg overflow-hidden shadow-lg">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search for jobs, companies, or keywords"
+                placeholder="Search for applicants, jobs, or keywords"
                 className="w-full px-6 py-4 border-none text-gray-700"
               />
               <button
                 type="submit"
                 className="bg-navy text-white px-8 py-4 whitespace-nowrap flex items-center"
+                disabled={searching}
               >
                 <span className="w-5 h-5 flex items-center justify-center mr-2">
                   <svg
@@ -63,7 +157,7 @@ const Homepage = () => {
                     />
                   </svg>
                 </span>
-                Search
+                {searching ? 'Searching...' : 'Search'}
               </button>
             </div>
           </form>
@@ -88,12 +182,12 @@ const Homepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   ACCOUNTANT/FINANCE
                 </h3>
-                <button
-                  onClick={() => navigate('/search?query=accountant')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
             {/* Category 2 */}
@@ -107,12 +201,12 @@ const Homepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">SECRETARY</h3>
-                <button
-                  onClick={() => navigate('/search?query=secretary')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
             {/* Category 3 */}
@@ -128,12 +222,12 @@ const Homepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   VIRTUAL ASSISTANT
                 </h3>
-                <button
-                  onClick={() => navigate('/search?category=Virtual Assistant')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
             {/* Category 4 */}
@@ -147,12 +241,12 @@ const Homepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">FOOD SERVICE</h3>
-                <button
-                  onClick={() => navigate('/search?query=food service')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
             {/* Category 5 */}
@@ -166,12 +260,12 @@ const Homepage = () => {
             >
               <div className="category-content h-full flex flex-col justify-end p-6 bg-black bg-opacity-30">
                 <h3 className="text-xl font-bold text-white mb-3">HUMAN RESOURCE</h3>
-                <button
-                  onClick={() => navigate('/search?query=human resource')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
             {/* Category 6 */}
@@ -187,12 +281,12 @@ const Homepage = () => {
                 <h3 className="text-xl font-bold text-white mb-3">
                   HEALTHCARE WORKERS
                 </h3>
-                <button
-                  onClick={() => navigate('/search?query=healthcare')}
+                <a
+                  href="#"
                   className="bg-black bg-opacity-70 text-white text-center py-2 px-6 rounded-lg inline-block w-24 whitespace-nowrap"
                 >
                   MORE
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -203,7 +297,7 @@ const Homepage = () => {
       <div className="w-full bg-navy text-white py-6 text-center">
         <p>
           Employer? Find the perfect team for your business.{' '}
-          <a href="company-registration" className="underline">
+          <a href="#" className="underline">
             Register here
           </a>
           .
@@ -241,4 +335,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default CompanyHomepage;
