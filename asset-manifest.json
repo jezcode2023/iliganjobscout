@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/jezcode2023/iliganjobscout.git/static/css/main.ceb5ef6a.css",
-    "main.js": "/jezcode2023/iliganjobscout.git/static/js/main.abd3710d.js",
-    "static/js/289.4ee084fe.chunk.js": "/jezcode2023/iliganjobscout.git/static/js/289.4ee084fe.chunk.js",
+    "main.js": "/jezcode2023/iliganjobscout.git/static/js/main.760b5b25.js",
+    "static/js/289.8091681e.chunk.js": "/jezcode2023/iliganjobscout.git/static/js/289.8091681e.chunk.js",
     "static/media/falls.jpg": "/jezcode2023/iliganjobscout.git/static/media/falls.b594a24ec1cae0d2db2a.jpg",
     "static/media/jobscout.png": "/jezcode2023/iliganjobscout.git/static/media/jobscout.df0e697f0dec6fe2df54.png",
     "index.html": "/jezcode2023/iliganjobscout.git/index.html",
     "main.ceb5ef6a.css.map": "/jezcode2023/iliganjobscout.git/static/css/main.ceb5ef6a.css.map",
-    "main.abd3710d.js.map": "/jezcode2023/iliganjobscout.git/static/js/main.abd3710d.js.map",
-    "289.4ee084fe.chunk.js.map": "/jezcode2023/iliganjobscout.git/static/js/289.4ee084fe.chunk.js.map"
+    "main.760b5b25.js.map": "/jezcode2023/iliganjobscout.git/static/js/main.760b5b25.js.map",
+    "289.8091681e.chunk.js.map": "/jezcode2023/iliganjobscout.git/static/js/289.8091681e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ceb5ef6a.css",
-    "static/js/main.abd3710d.js"
+    "static/js/main.760b5b25.js"
   ]
 }
