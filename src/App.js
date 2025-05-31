@@ -19,11 +19,12 @@ function App() {
 
   return (
     <Router>
+      <Route path="/signin" element={<SignIn setUserRole={setUserRole} />} />
       {/* Pass userRole to NavBar */}
       <NavBar userRole={userRole} />
       <Routes>
         {/* Pass setUserRole to SignIn */}
-        <Route path="/" element={<SignIn setUserRole={setUserRole} />} />
+        <Route path="/signin" element={<SignIn setUserRole={setUserRole} />} />
         <Route path="/jobseeker-signin" element={<JobSeekerSignIn setUserRole={setUserRole} />} />
         <Route path="/company-signin" element={<CompanySignIn setUserRole={setUserRole} />} />
         <Route path="/homepage" element={<Homepage />} />
