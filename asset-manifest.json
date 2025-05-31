@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/signin/static/css/main.ceb5ef6a.css",
-    "main.js": "/signin/static/js/main.4d21fc24.js",
-    "static/js/289.8091681e.chunk.js": "/signin/static/js/289.8091681e.chunk.js",
-    "static/media/falls.jpg": "/signin/static/media/falls.b594a24ec1cae0d2db2a.jpg",
-    "static/media/jobscout.png": "/signin/static/media/jobscout.df0e697f0dec6fe2df54.png",
-    "index.html": "/signin/index.html",
-    "main.ceb5ef6a.css.map": "/signin/static/css/main.ceb5ef6a.css.map",
-    "main.4d21fc24.js.map": "/signin/static/js/main.4d21fc24.js.map",
-    "289.8091681e.chunk.js.map": "/signin/static/js/289.8091681e.chunk.js.map"
+    "main.css": "/iliganjobscout/static/css/main.ceb5ef6a.css",
+    "main.js": "/iliganjobscout/static/js/main.68a114f5.js",
+    "static/js/289.8091681e.chunk.js": "/iliganjobscout/static/js/289.8091681e.chunk.js",
+    "static/media/falls.jpg": "/iliganjobscout/static/media/falls.b594a24ec1cae0d2db2a.jpg",
+    "static/media/jobscout.png": "/iliganjobscout/static/media/jobscout.df0e697f0dec6fe2df54.png",
+    "index.html": "/iliganjobscout/index.html",
+    "main.ceb5ef6a.css.map": "/iliganjobscout/static/css/main.ceb5ef6a.css.map",
+    "main.68a114f5.js.map": "/iliganjobscout/static/js/main.68a114f5.js.map",
+    "289.8091681e.chunk.js.map": "/iliganjobscout/static/js/289.8091681e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ceb5ef6a.css",
-    "static/js/main.4d21fc24.js"
+    "static/js/main.68a114f5.js"
   ]
 }
