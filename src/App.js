@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import NavBar from './components/NavBar';
 import SignIn from './components/signin';
@@ -21,8 +21,8 @@ function App() {
     <Router>
       <NavBar userRole={userRole} />
       <Routes>
-        {/* Default route goes to SignIn */}
-        <Route path="/" element={<SignIn setUserRole={setUserRole} />} />
+        {/* Default route goes to Homepage */}
+        <Route path="/homepage" element={<Homepage />} />
         <Route path="/signin" element={<SignIn setUserRole={setUserRole} />} />
         <Route path="/jobseeker-signin" element={<JobSeekerSignIn setUserRole={setUserRole} />} />
         <Route path="/company-signin" element={<CompanySignIn setUserRole={setUserRole} />} />
