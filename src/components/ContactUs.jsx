@@ -7,14 +7,15 @@ const ContactUs = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Contact Us Form Submitted:', { email, subject, message });
-    // Add logic to send the form data to a backend or email service
-    alert('Your message has been sent!');
+    // Open Outlook (or default mail client) with pre-filled fields
+    const mailto = `mailto:support@iliganjobscout.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+      `From: ${email}\n\n${message}`
+    )}`;
+    window.open(mailto, '_blank');
     setEmail('');
     setSubject('');
     setMessage('');
   };
-  
 
   return (
     <div className="flex flex-col mt-5 items-center justify-center min-h-screen bg-gray-100">

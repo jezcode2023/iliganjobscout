@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const CompanyProfile = () => {
   const [form, setForm] = useState({
     company_name: '',
+    about_company: '',
     description: '',
     location: '',
     website: '',
@@ -23,15 +24,49 @@ const CompanyProfile = () => {
 
     // Get the current logged-in user
     const { data: { user } } = await supabase.auth.getUser();
-    const { data, error } = await supabase
-      .from('company_profile')
+    if (!user) {
+      setLoading(false);
+      alert('You must be logged in to update your company profile.');
+      return;
+    }
+
+    // Get company info from companies table using user.id
+    const { data: company, error: companyError } = await supabase
+      .from('companies')
       .select('*')
       .eq('user_id', user.id)
       .single();
 
-    if (data) {
+    if (companyError) {
+      setLoading(false);
+      alert('Error fetching company: ' + companyError.message);
+      return;
+    }
+
+    if (!company) {
+      setLoading(false);
+      alert('No company record found for your account.');
+      return;
+    }
+
+    // Now update or insert into company_profile using company.id as foreign key if needed
+    const { data: profile, error: profileFetchError } = await supabase
+      .from('company_profile')
+      .select('*')
+      .eq('company_id', company.id)
+      .single();
+
+    if (profileFetchError && profileFetchError.code !== 'PGRST116') {
+      // PGRST116 = no rows found, which is OK for insert
+      setLoading(false);
+      alert('Error fetching profile: ' + profileFetchError.message);
+      return;
+    }
+
+    let upsertError = null;
+    if (profile) {
       // Update existing profile
-      await supabase
+      const { error } = await supabase
         .from('company_profile')
         .update({
           company_name: form.company_name,
@@ -39,25 +74,27 @@ const CompanyProfile = () => {
           location: form.location,
           website: form.website,
         })
-        .eq('user_id', user.id);
+        .eq('company_id', company.id);
+      upsertError = error;
     } else {
       // Insert new profile
-      await supabase.from('company_profile').insert([
+      const { error } = await supabase.from('company_profile').insert([
         {
-          user_id: user.id, // This must match the logged-in user's id
+          company_id: company.id,
           company_name: form.company_name,
           about_company: form.description,
           location: form.location,
           website: form.website,
         },
       ]);
+      upsertError = error;
     }
 
     setLoading(false);
 
-    if (error) {
-      console.error(error);
-      alert('Failed to save company profile!');
+    if (upsertError) {
+      console.error(upsertError);
+      alert('Failed to save company profile!\n' + upsertError.message);
     } else {
       alert('Company profile saved!');
       setForm({
@@ -66,7 +103,6 @@ const CompanyProfile = () => {
         location: '',
         website: '',
       });
-      // Redirect to dashboard after saving
       navigate('/company-dashboard');
     }
   };

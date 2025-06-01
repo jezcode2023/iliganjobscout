@@ -8,6 +8,16 @@ const Company = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const checkRole = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || user.user_metadata?.role !== 'jobseeker') {
+        navigate('/'); // or show an error
+      }
+    };
+    checkRole();
+  }, []);
+
+  useEffect(() => {
     const fetchCompanies = async () => {
       // Fetch company names from jobs table
       const { data: jobsData } = await supabase

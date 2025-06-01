@@ -24,11 +24,12 @@ const CompanyRegistration = () => {
     setLoading(true);
 
     // Register company with Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
         data: {
+          role: 'company',
           company_name: form.company_name,
           contact_person: form.contact_person,
           contact_number: form.contact_number,
@@ -37,14 +38,18 @@ const CompanyRegistration = () => {
       },
     });
 
-    if (error) {
+    if (authError) {
       setLoading(false);
-      alert(error.message);
+      if (authError.message.includes("For security purposes")) {
+        alert("Please wait a moment before trying to register again.");
+      } else {
+        alert(authError.message);
+      }
+      console.error('Auth Error:', authError);
       return;
     }
 
-    // Insert company details into companies table
-    // Use the correct user id from session if data.user is null (email confirmation required)
+    // Get the user id from the signUp response (if available)
     let userId = data.user?.id;
     if (!userId) {
       // Try to get the user id from the current session (for email confirmation flows)
@@ -52,25 +57,31 @@ const CompanyRegistration = () => {
       userId = sessionData?.session?.user?.id || null;
     }
 
-    const { error: insertError } = await supabase.from('companies').insert([
-      {
-        
-        company_name: form.company_name,
-        contact_person: form.contact_person,
-        contact_number: form.contact_number,
-        address: form.address,
-        email: form.email,
-      },
-    ]);
+    // Insert company details into companies table
+    if (userId) {
+      const { error: insertError } = await supabase.from('companies').insert([
+        {
+          user_id: userId,
+          company_name: form.company_name,
+          contact_person: form.contact_person,
+          contact_number: form.contact_number,
+          address: form.address,
+          email: form.email,
+        },
+      ]);
 
-    setLoading(false);
+      setLoading(false);
 
-    if (insertError) {
-      alert('Registration succeeded, but failed to save company details!');
-      console.error(insertError);
+      if (insertError) {
+        alert('Registration succeeded, but there was a problem saving company details.');
+        console.error(insertError);
+      } else {
+        alert('Registration successful! Please check your email to verify your account.');
+        navigate('/company-dashboard');
+      }
     } else {
+      setLoading(false);
       alert('Registration successful! Please check your email to verify your account.');
-      navigate('/company-dashboard');
     }
   };
 

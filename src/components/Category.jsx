@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-
-const slugMap = {
-  'Accountant/Finance': 'accountant',
-  'Secretary': 'secretary',
-  'Virtual Assistant': 'virtualassistant',
-  'Food Service': 'foodservice',
-  'Human Resource': 'humanresource',
-  'Healthcare Workers': 'healthcare',
-};
 
 const allowedCategories = [
   'Accountant/Finance',
@@ -21,6 +13,7 @@ const allowedCategories = [
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -38,6 +31,20 @@ const Category = () => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const checkRole = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || user.user_metadata?.role !== 'jobseeker') {
+        navigate('/'); // or show an error
+      }
+    };
+    checkRole();
+  }, []);
+
+  const handleCategoryClick = (category) => {
+    navigate(`/search?category=${encodeURIComponent(category)}`);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col pt-20">
       {/* Header */}
@@ -47,13 +54,14 @@ const Category = () => {
       <div className="flex-1 flex flex-col items-center">
         <div className="grid grid-cols-2 gap-4 w-full max-w-4xl px-4">
           {categories.map((category, index) => (
-            <a
-              key={index}
-              href={`/categories/${slugMap[category]}`}
-              className="text-lg text-blue-600 hover:underline cursor-pointer block"
-            >
-              {category}
-            </a>
+            <div key={index} className="mb-2">
+              <button
+                onClick={() => handleCategoryClick(category)}
+                className="text-lg text-blue-600 hover:underline cursor-pointer block w-full text-left"
+              >
+                {category}
+              </button>
+            </div>
           ))}
         </div>
       </div>

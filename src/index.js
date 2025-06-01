@@ -18,6 +18,10 @@ import PostJob from './components/postajob';
 import SearchResults from './components/SearchResults';
 import CompanyProfile from './components/CompanyProfile';
 import CompanyDashboard from './components/CompanyDashboard'; // Import CompanyDashboard
+import Apply from './components/Apply'; // Import Apply component
+import ApplicationForm from './components/applicationform';
+import JobseekerNavBar from './components/JobseekerNavBar';
+import CompanyNavBar from './components/CompanyNavBar';
 
 // Import category job pages
 import AccountantJobs from './components/categories/accountant';
@@ -26,6 +30,7 @@ import VirtualAssistantJobs from './components/categories/virtualassistant';
 import FoodServiceJobs from './components/categories/foodservice';
 import HumanResourceJobs from './components/categories/humanresource';
 import HealthcareJobs from './components/categories/healthcare';
+import JobseekerDashboard from './components/JobseekerDashboard';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -35,7 +40,7 @@ ReactDOM.render(
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/jobseeker-signin" element={<JobSeekerSignIn />} />
-         <Route path="/jobseeker-registration" element={<JobSeekerRegistration />} />
+        <Route path="/jobseeker-registration" element={<JobSeekerRegistration />} />
         <Route path="/company-signin" element={<CompanySignIn />} />
         <Route path="/company-homepage" element={<CompanyHomepage />} />
         <Route path="/post-job" element={<PostJob />} />
@@ -46,7 +51,21 @@ ReactDOM.render(
         <Route path="/company" element={<Company />} /> {/* Added route for Company */}
         <Route path="/user-homepage" element={<UserHomepage />} /> {/* Add route for UserHomepage */}
         <Route path="/company-profile" element={<CompanyProfile />} /> {/* Added route for CompanyProfile */}
-        <Route path="/company-dashboard" element={<CompanyDashboard />} /> {/* Added route for CompanyDashboard */}
+        <Route path="/company-dashboard" element={
+          <>
+            <CompanyNavBar />
+            <CompanyDashboard />
+          </>
+        } /> {/* Added route for CompanyDashboard */}
+        <Route path="/apply/:jobId" element={<Apply />} /> {/* Added route for Apply component */}
+        <Route path="/application-form/:jobId" element={<ApplicationForm />} /> {/* Added route for ApplicationForm */}
+
+        {/* Default route goes to Homepage */}
+        {/*Job Seeker Dashboard*/}
+        <Route path="/jobseeker-dashboard" element={<JobseekerDashboard />} />
+
+        {/* Job Seeker NavBar */}
+
 
         {/* Category job pages using slugMap */}
         <Route path="/categories/accountant" element={<AccountantJobs />} />
@@ -55,6 +74,10 @@ ReactDOM.render(
         <Route path="/categories/foodservice" element={<FoodServiceJobs />} />
         <Route path="/categories/humanresource" element={<HumanResourceJobs />} />
         <Route path="/categories/healthcare" element={<HealthcareJobs />} />
+        {/* User-specific NavBar for Job Seekers */}
+        <Route path="/jobseeker-navbar" element={<JobseekerNavBar />} />
+
+        {/* Company-specific NavBar */}
 
         {/* Search Results Page */}
         <Route path="/search" element={<SearchResults />} />

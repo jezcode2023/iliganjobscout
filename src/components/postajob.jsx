@@ -25,6 +25,7 @@ const PostJob = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     company_name: '',
+    company_email: '', // <-- Add this line
     title: '',
     description: '',
     location: '',
@@ -32,6 +33,7 @@ const PostJob = () => {
     salary_max: '',
     job_type: '',
     category: '',
+    job_url: '', // <-- Add this line
   });
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -81,6 +83,7 @@ const PostJob = () => {
       {
         company_id,
         company_name: form.company_name,
+        company_email: form.company_email, // <-- Save company_email
         title: form.title,
         description: form.description,
         location: form.location,
@@ -89,6 +92,7 @@ const PostJob = () => {
         job_type: form.job_type,
         category: form.category,
         logo_url, // Save logo URL with the job
+        job_url: form.job_url, // <-- Save job_url
       },
     ]);
 
@@ -171,6 +175,20 @@ const PostJob = () => {
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter company name"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Company Email
+            </label>
+            <input
+              type="email"
+              name="company_email"
+              value={form.company_email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter company email"
               required
             />
           </div>
@@ -290,6 +308,19 @@ const PostJob = () => {
                 <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">
+              Original Job URL
+            </label>
+            <input
+              type="url"
+              name="job_url"
+              value={form.job_url}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="https://original-job-link.com"
+            />
           </div>
           <button
             type="submit"

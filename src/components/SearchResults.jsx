@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 function useQuery() {
@@ -12,6 +12,7 @@ const SearchResults = () => {
   const category = useQuery().get('category') || '';
   const [searchResults, setSearchResults] = useState([]);
   const [searching, setSearching] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -74,7 +75,7 @@ const SearchResults = () => {
               </p>
               <button
                 className="mt-4 w-full bg-navy text-white py-2 rounded-md hover:bg-blue-700 transition"
-                onClick={() => alert('Apply functionality coming soon!')}
+                onClick={() => navigate(`/apply/${job.id}`)}
               >
                 Apply Now
               </button>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const CompanyDashboard = () => {
   const [profile, setProfile] = useState(null);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const CompanyDashboard = () => {
         setLoading(false);
         return;
       }
+      // Fetch company profile for this user
       const { data: profile, error } = await supabase
         .from('company_profile')
         .select('*')
@@ -27,9 +29,45 @@ const CompanyDashboard = () => {
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    const fetchApplications = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      // Fetch jobs posted by this company
+      const { data: jobs, error: jobsError } = await supabase
+        .from('jobs')
+        .select('id')
+        .eq('user_id', user.id);
+
+      if (jobsError || !jobs || jobs.length === 0) {
+        setApplications([]);
+        setLoading(false);
+        return;
+      }
+
+      const jobIds = jobs.map(j => j.id);
+
+      // Fetch applications for these jobs, including applicant info
+      const { data: apps, error: appsError } = await supabase
+        .from('job_applications')
+        .select('*, users:profiles(email, full_name)')
+        .in('job_id', jobIds);
+
+      setApplications(apps || []);
+      setLoading(false);
+    };
+    fetchApplications();
+  }, []);
+
   const handleLogout = () => {
     navigate('/company-signin');
   };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-100 pt-16">
@@ -111,6 +149,22 @@ const CompanyDashboard = () => {
           </div>
         ) : (
           <p>No company profile found. <span className="text-blue-600 underline cursor-pointer" onClick={() => navigate('/company-profile')}>Create Profile</span></p>
+        )}
+      </div>
+      {/* Applications Section */}
+      <div className="max-w-2xl mx-auto mt-8 bg-white rounded-lg shadow-md p-8">
+        <h2 className="text-2xl font-bold mb-6 text-navy">Applications</h2>
+        {applications.length === 0 ? (
+          <div>No applications yet.</div>
+        ) : (
+          applications.map(app => (
+            <div key={app.id} className="border p-4 mb-2 rounded">
+              <div><strong>Job ID:</strong> {app.job_id}</div>
+              <div><strong>Applicant Email:</strong> {app.users?.email || 'N/A'}</div>
+              <div><strong>Cover Letter:</strong> {app.cover_letter}</div>
+              <div><strong>Resume:</strong> <a href={app.resume} target="_blank" rel="noopener noreferrer">{app.resume}</a></div>
+            </div>
+          ))
         )}
       </div>
     </div>

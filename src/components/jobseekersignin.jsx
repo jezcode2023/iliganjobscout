@@ -11,13 +11,24 @@ const JobSeekerSignIn = ({ setUserRole }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     if (email && password) {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) {
         alert(error.message);
       } else {
+        const user = data.user;
+        if (user) {
+          await supabase.from('profiles').upsert([
+            {
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || '',
+              role: 'jobseeker',
+            },
+          ]);
+        }
         if (typeof setUserRole === 'function') {
           setUserRole('jobseeker');
         }

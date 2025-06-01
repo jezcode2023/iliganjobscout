@@ -21,6 +21,18 @@ const CompanySignIn = ({ setUserRole }) => {
       if (error) {
         alert(error.message);
       } else {
+        // Insert or upsert into profiles table after successful login
+        const user = data.user;
+        if (user) {
+          await supabase.from('profiles').upsert([
+            {
+              id: user.id,
+              email: user.email,
+              full_name: user.user_metadata?.full_name || '',
+              role: 'company',
+            }
+          ]);
+        }
         if (typeof setUserRole === 'function') {
           setUserRole('company');
         }
@@ -90,6 +102,7 @@ const CompanySignIn = ({ setUserRole }) => {
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Log In'}
+            
           </button>
         </form>
         <div className="mt-6 text-center">
@@ -103,7 +116,9 @@ const CompanySignIn = ({ setUserRole }) => {
         </div>
       </div>
     </div>
+    
   );
 };
 
 export default CompanySignIn;
+

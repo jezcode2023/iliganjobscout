@@ -8,9 +8,10 @@ const JobSeekerRegistration = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
-    full_name: '',
-    contact_number: '',
-    address: '',
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    resume_url: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -23,25 +24,45 @@ const JobSeekerRegistration = () => {
     setLoading(true);
 
     // Register user with Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
-        data: {
-          full_name: form.full_name,
-          contact_number: form.contact_number,
-          address: form.address,
-        },
+        data: { role: 'jobseeker' },
       },
     });
 
-    setLoading(false);
+    if (authError) {
+      setLoading(false);
+      return alert(authError.message);
+    }
 
-    if (error) {
-      alert(error.message);
+    // Get the authenticated user's ID from the session
+    const { data: sessionData } = await supabase.auth.getSession();
+    const userId = sessionData?.session?.user?.id;
+
+    if (userId) {
+      const { error: insertError } = await supabase.from('jobseekers').insert([
+        {
+          first_name: form.first_name,
+          last_name: form.last_name,
+          email: form.email,
+          phone_number: form.phone_number,
+          resume_url: form.resume_url,
+          user_id: userId, // Ensure this is set to the authenticated user's ID
+        },
+      ]);
+      setLoading(false);
+
+      if (insertError) {
+        alert(insertError.message);
+      } else {
+        alert('Registration successful! Please check your email to verify your account.');
+        navigate('/jobseeker-signin');
+      }
     } else {
+      setLoading(false);
       alert('Registration successful! Please check your email to verify your account.');
-      navigate('/jobseeker-signin');
     }
   };
 
@@ -61,10 +82,7 @@ const JobSeekerRegistration = () => {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 font-medium mb-2"
-            >
+            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
               Email
             </label>
             <input
@@ -79,10 +97,7 @@ const JobSeekerRegistration = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 font-medium mb-2"
-            >
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
               Password
             </label>
             <input
@@ -97,57 +112,61 @@ const JobSeekerRegistration = () => {
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="full_name"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Full Name
+            <label htmlFor="first_name" className="block text-gray-700 font-medium mb-2">
+              First Name
             </label>
             <input
               type="text"
-              id="full_name"
-              name="full_name"
-              value={form.full_name}
+              id="first_name"
+              name="first_name"
+              value={form.first_name}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
               required
             />
           </div>
           <div className="mb-4">
-            <label
-              htmlFor="contact_number"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Contact Number
+            <label htmlFor="last_name" className="block text-gray-700 font-medium mb-2">
+              Last Name
             </label>
             <input
               type="text"
-              id="contact_number"
-              name="contact_number"
-              value={form.contact_number}
+              id="last_name"
+              name="last_name"
+              value={form.last_name}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your contact number"
+              placeholder="Enter your last name"
               required
             />
           </div>
-          <div className="mb-6">
-            <label
-              htmlFor="address"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              Address
+          <div className="mb-4">
+            <label htmlFor="phone_number" className="block text-gray-700 font-medium mb-2">
+              Phone Number
             </label>
             <input
               type="text"
-              id="address"
-              name="address"
-              value={form.address}
+              id="phone_number"
+              name="phone_number"
+              value={form.phone_number}
               onChange={handleChange}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter your address"
-              required
+              placeholder="Enter your phone number"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="resume_url" className="block text-gray-700 font-medium mb-2">
+              Resume URL
+            </label>
+            <input
+              type="text"
+              id="resume_url"
+              name="resume_url"
+              value={form.resume_url}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Paste your resume link (Google Drive, Dropbox, etc.)"
             />
           </div>
           <button

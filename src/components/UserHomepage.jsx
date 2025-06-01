@@ -1,19 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import falls from '../components/falls.jpg'; // Adjust path if needed
 import jobscoutlogo from './jobscout.png';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
+import JobseekerNavBar from './JobseekerNavBar'; // <-- Import the JobseekerNavBar
 
 const UserHomepage = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [checking, setChecking] = useState(true);
+  const [unauthorized, setUnauthorized] = useState(false);
 
-  const handleLogout = () => {
-    // Add your logout logic here (e.g., clear auth, redirect, etc.)
-    navigate('/');
+  // Only allow jobseekers
+  useEffect(() => {
+    const checkRole = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || user.user_metadata?.role !== 'jobseeker') {
+        setUnauthorized(true);
+      }
+      setChecking(false);
+    };
+    checkRole();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/homepage');
   };
 
-  // Handle search form submit and redirect to SearchResults.jsx
   const handleSearch = (e) => {
     e.preventDefault();
     if (search.trim()) {
@@ -21,85 +36,43 @@ const UserHomepage = () => {
     }
   };
 
+  const handleSignUp = async (email, password) => {
+    const { user, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { role: 'jobseeker' }
+      }
+    });
+
+    if (error) {
+      console.error('Error signing up:', error.message);
+    } else {
+      console.log('Sign up successful:', user);
+      // Optionally, navigate the user or show a success message
+    }
+  };
+
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 pt-20">
+        <div className="text-lg text-gray-600">Checking access...</div>
+      </div>
+    );
+  }
+
+  if (unauthorized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 pt-20">
+        <div className="text-lg text-red-600">Access denied. Job seekers only.</div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full bg-whites mt-20">
-      {/* Navbar for logged-in users (no Sign In button) */}
-      <div className="fixed top-0 left-0 w-full h-20 bg-whites shadow-md z-50 flex items-center px-4">
-        {/* Logo */}
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => navigate('/user-homepage')}
-        >
-          <img src={jobscoutlogo} alt="Iligan JobScout Logo" className="h-16 w-auto" />
-          <span className="ml-2 font-bold text-xl">Iligan JobScout</span>
-        </div>
-        {/* Links */}
-        <ul className="hidden md:flex justify-center space-x-6 flex-1">
-          <li
-            className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/user-homepage')}
-          >
-            Home
-          </li>
-          <li
-            className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/user-category')}
-          >
-            Category
-          </li>
-          <li
-            className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/user-company')}
-          >
-            Employers
-          </li>
-          <li
-            className="px-3 text-xl cursor-pointer text-black hover:underline"
-            onClick={() => navigate('/contact-us')}
-          >
-            Contact
-          </li>
-        </ul>
-        {/* Hamburger Menu */}
-        <div className="ml-auto relative">
-          <button
-            className="flex items-center justify-center w-10 h-10 rounded-full focus:outline-none"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Open user menu"
-          >
-            {/* Hamburger Icon */}
-            <svg
-              className="w-7 h-7 text-navy"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" />
-            </svg>
-          </button>
-          {/* Dropdown Menu */}
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg py-2 z-50">
-              <button
-                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                onClick={() => {
-                  setMenuOpen(false);
-                  navigate('/profile');
-                }}
-              >
-                Profile
-              </button>
-              <button
-                className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Jobseeker-only Navbar */}
+      <JobseekerNavBar /> {/* <-- Use JobseekerNavBar here */}
 
       {/* Hero Section with Search */}
       <section
