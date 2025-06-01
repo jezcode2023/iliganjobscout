@@ -23,13 +23,12 @@ const CompanyRegistration = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Register company with Supabase Auth
+    // Register user with Supabase Auth
     const { data, error: authError } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
       options: {
         data: {
-          role: 'company',
           company_name: form.company_name,
           contact_person: form.contact_person,
           contact_number: form.contact_number,
@@ -40,48 +39,34 @@ const CompanyRegistration = () => {
 
     if (authError) {
       setLoading(false);
-      if (authError.message.includes("For security purposes")) {
-        alert("Please wait a moment before trying to register again.");
-      } else {
-        alert(authError.message);
-      }
-      console.error('Auth Error:', authError);
-      return;
+      console.error('Auth Error:', authError); // Log the error for debugging
+      return alert(authError.message);
     }
 
-    // Get the user id from the signUp response (if available)
-    let userId = data.user?.id;
-    if (!userId) {
-      // Try to get the user id from the current session (for email confirmation flows)
-      const { data: sessionData } = await supabase.auth.getSession();
-      userId = sessionData?.session?.user?.id || null;
-    }
-
-    // Insert company details into companies table
-    if (userId) {
-      const { error: insertError } = await supabase.from('companies').insert([
+    const user = data.user;
+    if (user) {
+      const { error: companyError } = await supabase.from('companies').insert([
         {
-          user_id: userId,
           company_name: form.company_name,
           contact_person: form.contact_person,
           contact_number: form.contact_number,
           address: form.address,
           email: form.email,
+          user_id: user.id,
         },
       ]);
-
       setLoading(false);
 
-      if (insertError) {
-        alert('Registration succeeded, but there was a problem saving company details.');
-        console.error(insertError);
+      if (companyError) {
+        console.error('Company Insert Error:', companyError); // Log the error for debugging
+        alert(companyError.message); // Show the error message to the user
       } else {
         alert('Registration successful! Please check your email to verify your account.');
         navigate('/company-dashboard');
       }
     } else {
       setLoading(false);
-      alert('Registration successful! Please check your email to verify your account.');
+      alert('Registration failed. Please try again.');
     }
   };
 

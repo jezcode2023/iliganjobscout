@@ -37,32 +37,30 @@ const JobSeekerRegistration = () => {
       return alert(authError.message);
     }
 
-    // Get the authenticated user's ID from the session
-    const { data: sessionData } = await supabase.auth.getSession();
-    const userId = sessionData?.session?.user?.id;
-
-    if (userId) {
-      const { error: insertError } = await supabase.from('jobseekers').insert([
+    // Insert jobseeker details into jobseekers table
+    const user = data.user;
+    if (user) {
+      const { error: jobseekerError } = await supabase.from('jobseekers').insert([
         {
           first_name: form.first_name,
           last_name: form.last_name,
           email: form.email,
           phone_number: form.phone_number,
           resume_url: form.resume_url,
-          user_id: userId, // Ensure this is set to the authenticated user's ID
+          user_id: user.id,
         },
       ]);
       setLoading(false);
 
-      if (insertError) {
-        alert(insertError.message);
+      if (jobseekerError) {
+        alert(jobseekerError.message);
       } else {
         alert('Registration successful! Please check your email to verify your account.');
         navigate('/jobseeker-signin');
       }
     } else {
       setLoading(false);
-      alert('Registration successful! Please check your email to verify your account.');
+      alert('Registration failed. Please try again.');
     }
   };
 
