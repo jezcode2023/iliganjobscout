@@ -10,6 +10,8 @@ const categories = [
   'Food Service',
   'Human Resource',
   'Healthcare Workers',
+  'Sales/Marketing',
+  'Information Technology',
 ];
 
 const jobTypes = [

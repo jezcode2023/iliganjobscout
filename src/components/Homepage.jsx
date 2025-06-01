@@ -1,10 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import falls from '../components/falls.jpg';
 
 const Homepage = () => {
   const [search, setSearch] = useState('');
+  const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('id, title, company_name, location')
+        .limit(8);
+      if (!error && data) setJobs(data);
+    };
+    fetchJobs();
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -212,17 +225,19 @@ const Homepage = () => {
 
       {/* Featured Jobs Section */}
       <div className="py-10">
-        <h2 className="text-center text-2xl font-bold mb-6">FEATURED JOBS</h2>
+        <h2 className="text-center text-2xl font-bold mb-6">JOB RECOMMENDATION</h2>
         <div className="grid grid-cols-4 gap-6 px-10">
-          {Array(8)
-            .fill('Job Title')
-            .map((job, index) => (
-              <div key={index} className="bg-navy text-white p-4 rounded-lg shadow-md">
-                <h3 className="font-bold">{job}</h3>
-                <p>Company Name</p>
-                <p>Location</p>
+          {jobs.length === 0 ? (
+            <div className="col-span-4 text-center text-gray-500">No jobs found.</div>
+          ) : (
+            jobs.map((job) => (
+              <div key={job.id} className="bg-navy text-white p-4 rounded-lg shadow-md">
+                <h3 className="font-bold">{job.title}</h3>
+                <p>{job.company_name}</p>
+                <p>{job.location}</p>
               </div>
-            ))}
+            ))
+          )}
         </div>
       </div>
 

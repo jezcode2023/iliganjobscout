@@ -6,6 +6,7 @@ const Apply = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
   const [checking, setChecking] = useState(true);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   // Fetch job info
@@ -21,6 +22,13 @@ const Apply = () => {
     };
     fetchJob();
   }, [jobId]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/search?query=${encodeURIComponent(search)}`);
+    }
+  };
 
   if (checking) {
     return (
@@ -40,39 +48,50 @@ const Apply = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Hero Section with Search */}
-      <section
-        className="relative bg-white py-16 w-full mt-20"
-        style={{
-          backgroundImage:
-            "url('https://readdy.ai/api/search-image?query=professional%20modern%20office%20environment%20with%20blue%20tones%2C%20clean%20workspace%2C%20business%20atmosphere%2C%20soft%20lighting%2C%20minimal%20design%2C%20workspace%20with%20computers%20and%20office%20supplies%2C%20corporate%20setting%2C%20blurred%20background%20for%20text%20overlay&width=1280&height=400&seq=1&orientation=landscape')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-primary bg-opacity-80 mt-20"></div>
+      {/* Hero Section with Search (copied from Homepage, no background image) */}
+      <section className="py-16 w-full mt-20 bg-navy">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-10">
-            <h1 className="text-4xl font-bold text-black mb-4">Find Your Dream Job Today</h1>
-            <p className="text-xl text-black opacity-90">
+            <h1 className="text-4xl font-bold text-whites mb-4">
+              Find Your Dream Job Today
+            </h1>
+            <p className="text-xl text-white opacity-90">
               Connect with thousands of employers and opportunities
             </p>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <div className="flex bg-navy rounded-button overflow-hidden shadow-lg">
+          <form className="max-w-2xl mx-auto" onSubmit={handleSearch}>
+            <div className="flex bg-gray rounded-lg overflow-hidden shadow-lg">
               <input
                 type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search for jobs, companies, or keywords"
-                className="search-input w-full px-6 py-4 border-none text-gray-700"
+                className="w-full px-6 py-4 border-none text-gray-700"
               />
-              <button className="bg-primary text-white px-8 py-4 rounded-button whitespace-nowrap flex items-center">
+              <button
+                type="submit"
+                className="bg-black text-white px-8 py-4 whitespace-nowrap flex items-center"
+              >
                 <span className="w-5 h-5 flex items-center justify-center mr-2">
-                  <i className="ri-search-line"></i>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
                 </span>
                 Search
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </section>
 

@@ -25,7 +25,7 @@ const SearchResults = () => {
         jobsQuery = jobsQuery.eq('company_name', company);
       } else if (query) {
         jobsQuery = jobsQuery.or(
-          `title.ilike.%${query}%,description.ilike.%${query}%,location.ilike.%${query}%`
+          `title.ilike.%${query}%,description.ilike.%${query}%,location.ilike.%${query}%,company_name.ilike.%${query}%`
         );
       }
 
@@ -54,7 +54,7 @@ const SearchResults = () => {
           {searchResults.map((job) => (
             <div key={job.id} className="bg-white rounded-lg shadow-md p-6">
               <h2 className="text-xl font-bold mb-2">{job.title}</h2>
-              <p className="mb-2">{job.description}</p>
+             
               <p className="text-gray-700 mb-1">
                 <span className="font-semibold">Company:</span> {job.company_name}
               </p>

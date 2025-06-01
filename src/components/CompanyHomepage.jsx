@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jobscoutlogo from './jobscout.png';
 import falls from '../components/falls.jpg';
@@ -9,6 +9,18 @@ const CompanyHomepage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [searching, setSearching] = useState(false);
+  const [jobs, setJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      const { data, error } = await supabase
+        .from('jobs')
+        .select('id, title, company_name, location')
+        .limit(8);
+      if (!error && data) setJobs(data);
+    };
+    fetchJobs();
+  }, []);
 
   const handleLogout = () => {
     // Add your logout logic here (e.g., clear auth, redirect, etc.)
@@ -124,7 +136,7 @@ const CompanyHomepage = () => {
               Find the Best Talent for Your Company
             </h1>
             <p className="text-xl text-white opacity-90">
-              Post jobs and manage applicants easily with Iligan JobScout
+             
             </p>
           </div>
           <form className="max-w-2xl mx-auto" onSubmit={handleSearch}>
@@ -308,15 +320,25 @@ const CompanyHomepage = () => {
       <div className="py-10">
         <h2 className="text-center text-2xl font-bold mb-6">FEATURED JOBS</h2>
         <div className="grid grid-cols-4 gap-6 px-10">
-          {Array(8)
-            .fill('Job Title')
-            .map((job, index) => (
-              <div key={index} className="bg-navy text-white p-4 rounded-lg shadow-md">
-                <h3 className="font-bold">{job}</h3>
-                <p>Company Name</p>
-                <p>Location</p>
+          {jobs.length === 0 ? (
+            <div className="col-span-4 text-center text-gray-500">No jobs found.</div>
+          ) : (
+            jobs.map((job) => (
+              <div key={job.id} className="bg-navy text-white p-4 rounded-lg shadow-md">
+                <h3 className="font-bold">{job.title}</h3>
+                <p>{job.company_name}</p>
+                <p>{job.location}</p>
               </div>
-            ))}
+            ))
+          )}
+        </div>
+        <div className="flex justify-center mt-8">
+          <button
+            className="bg-whites text-black px-6 py-2 rounded shadow font-semibold"
+            onClick={() => navigate('/search')}
+          >
+            See more
+          </button>
         </div>
       </div>
 
