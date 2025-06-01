@@ -9,6 +9,7 @@ const allowedCategories = [
   'Food Service',
   'Human Resource',
   'Healthcare Workers',
+  'Sales and Marketing',
 ];
 
 const Category = () => {

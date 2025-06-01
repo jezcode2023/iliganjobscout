@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../supabaseClient';
 
-const categoryName = 'Healthcare Workers';
+const categoryName = 'Sales';
 
-const HealthcareJobs = () => {
+const SalesJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -56,4 +56,42 @@ const HealthcareJobs = () => {
   );
 };
 
-export default HealthcareJobs;
+const SalesCategory = () => {
+  return (
+    <div className="category-details p-8 bg-white rounded-lg shadow-md mt-8">
+      <h2 className="text-3xl font-bold text-navy mb-4">SALES</h2>
+      <p className="mb-4 text-gray-700">
+        Sales professionals are responsible for selling products or services, building relationships with clients, and achieving sales targets. They play a key role in driving business growth and customer satisfaction.
+      </p>
+      <h3 className="text-xl font-semibold text-navy mb-2">Common Sales Roles:</h3>
+      <ul className="list-disc list-inside mb-4 text-gray-700">
+        <li>Sales Representative</li>
+        <li>Account Executive</li>
+        <li>Sales Associate</li>
+        <li>Business Development Officer</li>
+        <li>Sales Manager</li>
+        <li>Retail Salesperson</li>
+      </ul>
+      <h3 className="text-xl font-semibold text-navy mb-2">Key Skills:</h3>
+      <ul className="list-disc list-inside mb-4 text-gray-700">
+        <li>Communication and negotiation</li>
+        <li>Customer relationship management</li>
+        <li>Persuasion and closing skills</li>
+        <li>Product knowledge</li>
+        <li>Goal-oriented mindset</li>
+        <li>Time management</li>
+      </ul>
+      <h3 className="text-xl font-semibold text-navy mb-2">Typical Employers:</h3>
+      <ul className="list-disc list-inside text-gray-700">
+        <li>Retail companies</li>
+        <li>Wholesale distributors</li>
+        <li>Manufacturing firms</li>
+        <li>Service providers</li>
+        <li>Real estate agencies</li>
+        <li>Pharmaceutical companies</li>
+      </ul>
+    </div>
+  );
+};
+
+export default SalesJobs;
