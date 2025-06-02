@@ -65,15 +65,8 @@ const JobSeekerRegistration = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      {/* Logo */}
-      <div className="mb-6">
-        <img
-          src={jobscoutlogo}
-          alt="Iligan JobScout Logo"
-          className="h-40 w-auto"
-        />
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 mt-10">
+      
       <div className="bg-white p-7 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-navy text-2xl font-bold mb-6 text-center">
           Job Seeker Registration
