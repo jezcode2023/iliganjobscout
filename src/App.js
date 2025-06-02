@@ -27,6 +27,7 @@ function App() {
   return (
     <Router>
       {/* Public NavBar for public pages only */}
+        <Route path="/homepage" element={<><NavBar userRole={userRole} /><Homepage /></>} />
       {/* Render NavBar only on public routes, not on jobseeker/company pages */}
       {/* You can use a layout or check location.pathname if you want more control */}
 

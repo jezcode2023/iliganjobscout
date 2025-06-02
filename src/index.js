@@ -36,9 +36,7 @@ import JobseekerDashboard from './components/JobseekerDashboard';
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <NavBar /> {/* Place NavBar here, outside Routes */}
-      <Homepage />
-      
+      <NavBar />
       <Routes>
         <Route path="/signin" element={<SignIn />} />
         <Route path="/jobseeker-signin" element={<JobSeekerSignIn />} />
@@ -70,6 +68,7 @@ ReactDOM.render(
         <Route path="/categories/humanresource" element={<HumanResourceJobs />} />
         <Route path="/categories/healthcare" element={<HealthcareJobs />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/" element={<Homepage />} /> {/* Default homepage route */}
       </Routes>
     </Router>
   </React.StrictMode>,
