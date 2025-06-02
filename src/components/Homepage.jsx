@@ -213,15 +213,19 @@ const Homepage = () => {
       </section>
 
       {/* Employer Section */}
-      <div className="w-full bg-navy text-white py-6 text-center">
-        <p>
-          Employer? Find the perfect team for your business.{' '}
-          <a href="company-registration" className="underline">
-            Register here
-          </a>
-          .
-        </p>
-      </div>
+     <div className="w-full bg-navy text-white py-6 text-center">
+  <p>
+    Looking for a job? Find the perfect job for you{' '}
+    <span
+      className="underline cursor-pointer"
+      onClick={() => navigate('/category')}
+    >
+      here
+    </span>
+    .
+  </p>
+  <p className="mt-4">&copy; 2025 Iligan JobScout</p>
+</div>
 
       {/* Featured Jobs Section */}
       <div className="py-10">

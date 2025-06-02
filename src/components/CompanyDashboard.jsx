@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const CompanyDashboard = () => {
   const [profile, setProfile] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [companyJobs, setCompanyJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -61,6 +62,31 @@ const CompanyDashboard = () => {
       setLoading(false);
     };
     fetchApplications();
+  }, []);
+
+  useEffect(() => {
+    const fetchCompanyJobs = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Fetch company profile to get company_name
+      const { data: profile, error } = await supabase
+        .from('company_profile')
+        .select('company_name')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error || !profile?.company_name) return;
+
+      // Fetch jobs posted by this company_name
+      const { data: jobs, error: jobsError } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('company_name', profile.company_name);
+
+      if (!jobsError && jobs) setCompanyJobs(jobs);
+    };
+    fetchCompanyJobs();
   }, []);
 
   const handleLogout = () => {
@@ -151,18 +177,19 @@ const CompanyDashboard = () => {
           <p>No company profile found. <span className="text-blue-600 underline cursor-pointer" onClick={() => navigate('/company-profile')}>Create Profile</span></p>
         )}
       </div>
-      {/* Applications Section */}
+     
+      {/* Company Jobs Section */}
       <div className="max-w-2xl mx-auto mt-8 bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold mb-6 text-navy">Applications</h2>
-        {applications.length === 0 ? (
-          <div>No applications yet.</div>
+        <h2 className="text-2xl font-bold mb-6 text-navy">Your Posted Jobs</h2>
+        {companyJobs.length === 0 ? (
+          <div>No jobs posted yet.</div>
         ) : (
-          applications.map(app => (
-            <div key={app.id} className="border p-4 mb-2 rounded">
-              <div><strong>Job ID:</strong> {app.job_id}</div>
-              <div><strong>Applicant Email:</strong> {app.users?.email || 'N/A'}</div>
-              <div><strong>Cover Letter:</strong> {app.cover_letter}</div>
-              <div><strong>Resume:</strong> <a href={app.resume} target="_blank" rel="noopener noreferrer">{app.resume}</a></div>
+          companyJobs.map(job => (
+            <div key={job.id} className="border p-4 mb-2 rounded">
+              <div><strong>Title:</strong> {job.title}</div>
+              <div><strong>Description:</strong> {job.description}</div>
+              <div><strong>Location:</strong> {job.location}</div>
+              <div><strong>Posted:</strong> {job.posted_at ? new Date(job.posted_at).toLocaleDateString() : 'N/A'}</div>
             </div>
           ))
         )}

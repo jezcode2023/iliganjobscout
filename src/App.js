@@ -9,6 +9,8 @@ import CompanySignIn from './components/companysignin';
 import Homepage from './components/Homepage';
 import UserHomepage from './components/UserHomepage';
 import Apply from './components/Apply';
+import JobseekerProtectedRoute from './components/JobseekerProtectedRoute';
+import CompanyHomepage from './components/CompanyHomepage';
 // import CompanyHomepage from './components/CompanyHomepage'; // If you have one
 
 function App() {
@@ -38,8 +40,16 @@ function App() {
         {/* -------- JOBSEEKER ROUTES -------- */}
         <Route path="/user-homepage" element={<><JobseekerNavBar /><UserHomepage /></>} />
         <Route path="/apply/:jobId" element={<><JobseekerNavBar /><Apply /></>} />
+        <Route path="/user-homepage" element={
+      <JobseekerProtectedRoute>
+        <UserHomepage />
+      </JobseekerProtectedRoute>
+    }
+  />
 
         {/* -------- COMPANY ROUTES -------- */}
+        <Route path="/company-homepage" element={<><CompanyNavBar /><CompanyHomepage /></>} />
+        <Route path="/company-dashboard" element={<><CompanyNavBar /><CompanyHomepage /></>} />
         {/* Example: Uncomment and use if you have company-specific pages */}
         {/* <Route path="/company-homepage" element={<><CompanyNavBar /><CompanyHomepage /></>} /> */}
 

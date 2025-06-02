@@ -32,10 +32,12 @@ import HumanResourceJobs from './components/categories/humanresource';
 import HealthcareJobs from './components/categories/healthcare';
 import JobseekerDashboard from './components/JobseekerDashboard';
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <NavBar />
+      <NavBar /> {/* Place NavBar here, outside Routes */}
+      <Homepage />
       
       <Routes>
         <Route path="/signin" element={<SignIn />} />
@@ -47,39 +49,26 @@ ReactDOM.render(
         <Route path="/company-registration" element={<CompanyRegistration />} />
         <Route path="/homepage" element={<Homepage />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/category" element={<Category />} /> {/* Added route */}
-        <Route path="/company" element={<Company />} /> {/* Added route for Company */}
-        <Route path="/user-homepage" element={<UserHomepage />} /> {/* Add route for UserHomepage */}
-        <Route path="/company-profile" element={<CompanyProfile />} /> {/* Added route for CompanyProfile */}
+        <Route path="/category" element={<Category />} />
+        <Route path="/company" element={<Company />} />
+        <Route path="/user-homepage" element={<UserHomepage />} />
+        <Route path="/company-profile" element={<CompanyProfile />} />
         <Route path="/company-dashboard" element={
           <>
             <CompanyNavBar />
             <CompanyDashboard />
           </>
-        } /> {/* Added route for CompanyDashboard */}
-        <Route path="/apply/:jobId" element={<Apply />} /> {/* Added route for Apply component */}
-        <Route path="/application-form/:jobId" element={<ApplicationForm />} /> {/* Added route for ApplicationForm */}
-
-        {/* Default route goes to Homepage */}
-        {/*Job Seeker Dashboard*/}
+        } />
+        <Route path="/apply/:jobId" element={<Apply />} />
+        <Route path="/application-form/:jobId" element={<ApplicationForm />} />
         <Route path="/jobseeker-dashboard" element={<JobseekerDashboard />} />
-
-        {/* Job Seeker NavBar */}
-
-
-        {/* Category job pages using slugMap */}
+        <Route path="/jobseeker-navbar" element={<JobseekerNavBar />} />
         <Route path="/categories/accountant" element={<AccountantJobs />} />
         <Route path="/categories/secretary" element={<SecretaryJobs />} />
         <Route path="/categories/virtualassistant" element={<VirtualAssistantJobs />} />
         <Route path="/categories/foodservice" element={<FoodServiceJobs />} />
         <Route path="/categories/humanresource" element={<HumanResourceJobs />} />
         <Route path="/categories/healthcare" element={<HealthcareJobs />} />
-        {/* User-specific NavBar for Job Seekers */}
-        <Route path="/jobseeker-navbar" element={<JobseekerNavBar />} />
-
-        {/* Company-specific NavBar */}
-
-        {/* Search Results Page */}
         <Route path="/search" element={<SearchResults />} />
       </Routes>
     </Router>

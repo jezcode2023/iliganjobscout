@@ -84,7 +84,6 @@ const UserHomepage = () => {
 
   return (
     <div className="w-full bg-whites mt-20">
-      {/* Jobseeker-only Navbar */}
       <JobseekerNavBar />
 
       {/* Hero Section with Search */}
@@ -312,9 +311,12 @@ const UserHomepage = () => {
       <div className="w-full bg-navy text-white py-6 text-center">
         <p>
           Looking for a job? Find the perfect job for you{' '}
-          <a href="/category" className="underline">
+          <span
+            className="underline cursor-pointer"
+            onClick={() => navigate('/category')}
+          >
             here
-          </a>
+          </span>
           .
         </p>
         <p className="mt-4">&copy; 2025 Iligan JobScout</p>

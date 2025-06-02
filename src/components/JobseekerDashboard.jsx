@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const JobseekerDashboard = () => {
   const [profile, setProfile] = useState(null);
   const [applications, setApplications] = useState([]);
+  const [appliedJobs, setAppliedJobs] = useState([]); // <-- Added state for jobs applied
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -38,10 +39,23 @@ const JobseekerDashboard = () => {
       // Fetch applications by this jobseeker
       const { data: apps } = await supabase
         .from('applications')
-        .select('id, job_id, cover_letter, created_at, job:jobs(title, company_name)')
+        .select('id, job_id, cover_letter, created_at, job:jobs(title, company_name, location, description)')
         .eq('user_id', user.id);
 
       setApplications(apps || []);
+
+      // Fetch jobs applied (details)
+      if (apps && apps.length > 0) {
+        const jobIds = apps.map(app => app.job_id);
+        const { data: jobsData } = await supabase
+          .from('jobs')
+          .select('*')
+          .in('id', jobIds);
+        setAppliedJobs(jobsData || []);
+      } else {
+        setAppliedJobs([]);
+      }
+
       setLoading(false);
     };
     fetchApplications();
@@ -124,6 +138,27 @@ const JobseekerDashboard = () => {
               ))}
             </tbody>
           </table>
+        )}
+      </div>
+      {/* Jobs Applied Section */}
+      <div className="max-w-4xl mx-auto mt-8 bg-white rounded-lg shadow-md p-8">
+        <h2 className="text-2xl font-bold mb-6 text-navy">Jobs You Applied</h2>
+        {appliedJobs.length === 0 ? (
+          <div>No jobs found.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {appliedJobs.map(job => (
+              <div key={job.id} className="bg-gray-50 rounded-lg shadow p-4">
+                <h3 className="font-bold text-lg mb-2">{job.title}</h3>
+                <p className="mb-1"><span className="font-semibold">Company:</span> {job.company_name}</p>
+                <p className="mb-1"><span className="font-semibold">Location:</span> {job.location}</p>
+                <p className="mb-1"><span className="font-semibold">Description:</span> {job.description}</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Posted: {job.posted_at ? new Date(job.posted_at).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
