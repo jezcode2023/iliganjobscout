@@ -215,10 +215,10 @@ const Homepage = () => {
       {/* Employer Section */}
      <div className="w-full bg-navy text-white py-6 text-center">
   <p>
-    Looking for a job? Find the perfect job for you{' '}
+    Employer? Post your job{' '}
     <span
       className="underline cursor-pointer"
-      onClick={() => navigate('/category')}
+      onClick={() => navigate('/post-job')}
     >
       here
     </span>
