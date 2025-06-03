@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/iliganjobscout/static/css/main.66386600.css",
-    "main.js": "/iliganjobscout/static/js/main.16c9c52a.js",
+    "main.css": "/iliganjobscout/static/css/main.5f4a8d73.css",
+    "main.js": "/iliganjobscout/static/js/main.5d7a6619.js",
     "static/js/289.8091681e.chunk.js": "/iliganjobscout/static/js/289.8091681e.chunk.js",
     "static/media/falls.jpg": "/iliganjobscout/static/media/falls.b594a24ec1cae0d2db2a.jpg",
     "static/media/jobscout.png": "/iliganjobscout/static/media/jobscout.df0e697f0dec6fe2df54.png",
     "index.html": "/iliganjobscout/index.html",
-    "main.66386600.css.map": "/iliganjobscout/static/css/main.66386600.css.map",
-    "main.16c9c52a.js.map": "/iliganjobscout/static/js/main.16c9c52a.js.map",
+    "main.5f4a8d73.css.map": "/iliganjobscout/static/css/main.5f4a8d73.css.map",
+    "main.5d7a6619.js.map": "/iliganjobscout/static/js/main.5d7a6619.js.map",
     "289.8091681e.chunk.js.map": "/iliganjobscout/static/js/289.8091681e.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.66386600.css",
-    "static/js/main.16c9c52a.js"
+    "static/css/main.5f4a8d73.css",
+    "static/js/main.5d7a6619.js"
   ]
 }
